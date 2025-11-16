@@ -51,20 +51,21 @@ export default function Services() {
   ];
 
   return (
-    <section className="py-16 px-4 bg-base-200 rounded-2xl mt-25">
+    <section className="py-16 px-9 bg-[#03373D] rounded-2xl mt-25 text-white">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-3xl  font-bold">Our Services</h2>
         <p className="  mt-2 mb-12">
-          Enjoy fast, reliable parcel delivery with real-time tracking and a
-          seamless experience.
+          Enjoy fast, reliable parcel delivery with real-time tracking and zero
+          hassle. From personal packages to <br />
+          business shipments — we deliver on time, every time.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => (
             <div
               key={i}
-              className={`
-                card shadow-md hover:shadow-xl hover:bg-primary border-lime-300  transition border
+              className={` bg-white text-secondary
+                card shadow-md hover:shadow-xl  hover:bg-primary hover:text-black border-gray-200  transition border
                 
               `}
             >
@@ -74,10 +75,10 @@ export default function Services() {
                 >
                   {service.icon}
                 </div>
-                <h3 className="card-title text-secondary font-semibold mt-4">
+                <h3 className="card-title  font-semibold mt-4">
                   {service.title}
                 </h3>
-                <p className="text-gray-600">{service.desc}</p>
+                <p className="">{service.desc}</p>
               </div>
             </div>
           ))}

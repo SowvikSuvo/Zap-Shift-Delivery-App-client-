@@ -41,7 +41,7 @@ const Banner = () => {
         </button>
 
         {/* Be A Rider */}
-        <button className="px-6 py-2 bg-white rounded-full border border-gray-300 font-semibold hover:bg-gray-100 duration-200 w-full md:w-auto justify-center">
+        <button className="px-6 py-2 bg-white text-black rounded-full border border-gray-300 font-semibold hover:bg-gray-100 duration-200 w-full md:w-auto justify-center">
           Be A Rider
         </button>
       </div>
