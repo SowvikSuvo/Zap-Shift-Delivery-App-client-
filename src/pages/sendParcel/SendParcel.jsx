@@ -1,12 +1,26 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
+import { useLoaderData } from "react-router";
 
 const SendParcel = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm();
+  const serviceCenters = useLoaderData();
+  const regionsDuplicate = serviceCenters.map((c) => c.region);
+  const regions = [...new Set(regionsDuplicate)];
+  const senderRegion = useWatch({ control, name: "senderRegion" });
+  const receiverRegion = useWatch({ control, name: "receiverRegion" });
+
+  const districtsByRegion = (region) => {
+    const regionDistricts = serviceCenters.filter((c) => c.region === region);
+    const districts = regionDistricts.map((d) => d.district);
+    return districts;
+  };
+
   const handleSendParcel = (data) => {
     console.log(data);
   };
@@ -78,13 +92,24 @@ const SendParcel = () => {
 
               <div className="flex flex-col gap-5">
                 <div>
-                  <label className="block mb-1 font-medium">Sender Name</label>
+                  <label className="block mb-1 font-medium">Parcel Name</label>
                   <input
                     type="text"
-                    {...register("senderName")}
-                    placeholder="Sender Name"
+                    {...register("parcelName")}
+                    placeholder="Parcel Name"
                     className="border rounded-lg p-3 w-full"
                   />
+                  <div className="mt-5">
+                    <label className="block mb-1 font-medium">
+                      Sender Email
+                    </label>
+                    <input
+                      type="email"
+                      {...register("senderEmail")}
+                      placeholder="Sender Email"
+                      className="border rounded-lg p-3 w-full"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -109,75 +134,43 @@ const SendParcel = () => {
                   />
                 </div>
 
+                {/* sender region */}
                 <div>
                   <label className="block mb-1 font-medium">
-                    Your District
+                    Sender Regions
                   </label>
                   <select
+                    defaultValue="Pick a region"
+                    type="select"
+                    {...register("senderRegion")}
+                    className=" border rounded-lg p-3 w-full "
+                  >
+                    <option disabled={true}>Pick a region</option>
+                    {regions.map((r, i) => (
+                      <option key={i} value={r}>
+                        {r}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* sender districts */}
+                <div>
+                  <label className="block mb-1 font-medium">
+                    Sender Districts
+                  </label>
+                  <select
+                    defaultValue="Pick a districts"
                     type="select"
                     {...register("senderDistrict")}
-                    className="border rounded-lg p-3 w-full "
+                    className=" border rounded-lg p-3 w-full "
                   >
-                    <option value="">Select your District</option>
-                    <option>Dhaka</option>
-                    <option>Faridpur</option>
-                    <option>Gazipur</option>
-                    <option>Gopalganj</option>
-                    <option>Kishoreganj</option>
-                    <option>Madaripur</option>
-                    <option>Manikganj</option>
-                    <option>Munshiganj</option>
-                    <option>Narayanganj</option>
-                    <option>Narsingdi</option>
-                    <option>Rajbari</option>
-                    <option>Shariatpur</option>
-                    <option>Tangail</option>
-                    <option>Bogra</option>
-                    <option>Joypurhat</option>
-                    <option>Naogaon</option>
-                    <option>Natore</option>
-                    <option>Chapai Nawabganj</option>
-                    <option>Pabna</option>
-                    <option>Rajshahi</option>
-                    <option>Sirajganj</option>
-                    <option>Dinajpur</option>
-                    <option>Gaibandha</option>
-                    <option>Kurigram</option>
-                    <option>Lalmonirhat</option>
-                    <option>Nilphamari</option>
-                    <option>Panchagarh</option>
-                    <option>Rangpur</option>
-                    <option>Thakurgaon</option>
-                    <option>Habiganj</option>
-                    <option>Moulvibazar</option>
-                    <option>Sunamganj</option>
-                    <option>Sylhet</option>
-                    <option>Barguna</option>
-                    <option>Barisal</option>
-                    <option>Bhola</option>
-                    <option>Jhalokathi</option>
-                    <option>Patuakhali</option>
-                    <option>Pirojpur</option>
-                    <option>Bandarban</option>
-                    <option>Brahmanbaria</option>
-                    <option>Chandpur</option>
-                    <option>Chattogram</option>
-                    <option>Cox's Bazar</option>
-                    <option>Feni</option>
-                    <option>Khagrachhari</option>
-                    <option>Lakshmipur</option>
-                    <option>Noakhali</option>
-                    <option>Rangamati</option>
-                    <option>Bagerhat</option>
-                    <option>Chuadanga</option>
-                    <option>Jashore</option>
-                    <option>Jhenaidah</option>
-                    <option>Khulna</option>
-                    <option>Kushtia</option>
-                    <option>Magura</option>
-                    <option>Meherpur</option>
-                    <option>Narail</option>
-                    <option>Satkhira</option>
+                    <option disabled={true}>Pick a District</option>
+                    {districtsByRegion(senderRegion).map((r, i) => (
+                      <option key={i} value={r}>
+                        {r}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -209,6 +202,17 @@ const SendParcel = () => {
                     placeholder="Receiver Name"
                     className="border rounded-lg p-3 w-full"
                   />
+                  <div className="mt-5">
+                    <label className="block mb-1 font-medium">
+                      Receiver Email
+                    </label>
+                    <input
+                      type="email"
+                      {...register("ReceiverEmail")}
+                      placeholder="Receiver Email"
+                      className="border rounded-lg p-3 w-full"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -235,75 +239,43 @@ const SendParcel = () => {
                   />
                 </div>
 
+                {/* Receiver region */}
+                <div>
+                  <label className="block mb-1 font-medium">
+                    Receiver Regions
+                  </label>
+                  <select
+                    defaultValue="Pick a Regions"
+                    type="select"
+                    {...register("receiverRegion")}
+                    className=" border rounded-lg p-3 w-full "
+                  >
+                    <option disabled={true}>Pick a region</option>
+                    {regions.map((r, i) => (
+                      <option key={i} value={r}>
+                        {r}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Receiver districts */}
                 <div>
                   <label className="block mb-1 font-medium">
                     Receiver District
                   </label>
                   <select
+                    defaultValue="Pick a district"
                     type="select"
                     {...register("ReceiverDistrict")}
-                    className="border rounded-lg p-3 w-full text-gray-600"
+                    className=" border rounded-lg p-3 w-full "
                   >
-                    <option value="">Select your District</option>
-                    <option>Dhaka</option>
-                    <option>Faridpur</option>
-                    <option>Gazipur</option>
-                    <option>Gopalganj</option>
-                    <option>Kishoreganj</option>
-                    <option>Madaripur</option>
-                    <option>Manikganj</option>
-                    <option>Munshiganj</option>
-                    <option>Narayanganj</option>
-                    <option>Narsingdi</option>
-                    <option>Rajbari</option>
-                    <option>Shariatpur</option>
-                    <option>Tangail</option>
-                    <option>Bogra</option>
-                    <option>Joypurhat</option>
-                    <option>Naogaon</option>
-                    <option>Natore</option>
-                    <option>Chapai Nawabganj</option>
-                    <option>Pabna</option>
-                    <option>Rajshahi</option>
-                    <option>Sirajganj</option>
-                    <option>Dinajpur</option>
-                    <option>Gaibandha</option>
-                    <option>Kurigram</option>
-                    <option>Lalmonirhat</option>
-                    <option>Nilphamari</option>
-                    <option>Panchagarh</option>
-                    <option>Rangpur</option>
-                    <option>Thakurgaon</option>
-                    <option>Habiganj</option>
-                    <option>Moulvibazar</option>
-                    <option>Sunamganj</option>
-                    <option>Sylhet</option>
-                    <option>Barguna</option>
-                    <option>Barisal</option>
-                    <option>Bhola</option>
-                    <option>Jhalokathi</option>
-                    <option>Patuakhali</option>
-                    <option>Pirojpur</option>
-                    <option>Bandarban</option>
-                    <option>Brahmanbaria</option>
-                    <option>Chandpur</option>
-                    <option>Chattogram</option>
-                    <option>Cox's Bazar</option>
-                    <option>Feni</option>
-                    <option>Khagrachhari</option>
-                    <option>Lakshmipur</option>
-                    <option>Noakhali</option>
-                    <option>Rangamati</option>
-                    <option>Bagerhat</option>
-                    <option>Chuadanga</option>
-                    <option>Jashore</option>
-                    <option>Jhenaidah</option>
-                    <option>Khulna</option>
-                    <option>Kushtia</option>
-                    <option>Magura</option>
-                    <option>Meherpur</option>
-                    <option>Narail</option>
-                    <option>Satkhira</option>
+                    <option disabled={true}>Pick a District</option>
+                    {districtsByRegion(receiverRegion).map((d, i) => (
+                      <option key={i} value={d}>
+                        {d}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
