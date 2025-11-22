@@ -1,11 +1,11 @@
 import React from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import Logo from "../components/Logo";
-import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import { TbTruckDelivery } from "react-icons/tb";
 
 const DashboardLayout = () => {
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer lg:drawer-open max-w-7xl mx-auto">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         {/* Navbar */}
@@ -74,8 +74,12 @@ const DashboardLayout = () => {
             </li>
             {/* our dashboard links */}
             <li>
-              <NavLink to="/dashboard/my-parcels">
-                <MdOutlineProductionQuantityLimits />
+              <NavLink
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="My Parcels"
+                to="/dashboard/my-parcels"
+              >
+                <TbTruckDelivery className="my-1.5 inline-block size-4" />
                 <span className="is-drawer-close:hidden"> My Parcels</span>
               </NavLink>
             </li>
