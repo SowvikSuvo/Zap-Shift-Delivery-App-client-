@@ -23,6 +23,7 @@ const PaymentSuccess = () => {
         });
     }
   }, [sessionId, axiosSecure]);
+   
   return (
     <div className="space-y-2 p-5">
       <h2 className="text-4xl text-green-400">Payment Successful</h2>
