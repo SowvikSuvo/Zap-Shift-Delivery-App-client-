@@ -12,6 +12,7 @@ const Rider = () => {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
   const serviceCenters = useLoaderData();
@@ -43,6 +44,7 @@ const Rider = () => {
           showConfirmButton: false,
           timer: 2000,
         });
+        reset();
       }
     });
   };

@@ -31,6 +31,35 @@ const ApproveRiders = () => {
     });
   };
 
+  const handleRiderDelete = (id) => {
+    console.log(id);
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This rider information will be permanently deleted!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/riders/${id}`).then((res) => {
+          console.log(res.data);
+          if (res.data.deletedCount) {
+            // refresh the data ui
+            refetch();
+            Swal.fire({
+              title: "Rider Deleted!",
+              text: "The rider has been successfully removed.",
+              icon: "success",
+            });
+          }
+        });
+      }
+    });
+  };
+
   const handleApproval = (rider) => {
     updateRiderStatus(rider, "approved");
   };
@@ -69,8 +98,10 @@ const ApproveRiders = () => {
                   <p
                     className={`${
                       rider.status === "approved"
-                        ? "text-green-600"
-                        : "text-red-500"
+                        ? "text-green-600 font-semibold"
+                        : rider.status === "pending"
+                        ? "text-orange-500 font-semibold"
+                        : "text-red-500 font-semibold"
                     }`}
                   >
                     {rider.status}
@@ -86,7 +117,10 @@ const ApproveRiders = () => {
                   >
                     <IoPersonRemoveSharp />
                   </button>
-                  <button className="btn">
+                  <button
+                    onClick={() => handleRiderDelete(rider._id)}
+                    className="btn"
+                  >
                     <FaTrashCan></FaTrashCan>
                   </button>
                 </td>
